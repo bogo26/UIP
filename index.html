@@ -1,5 +1,12 @@
 <!DOCTYPE html>
 <html>
+
+<style>
+    .selected {
+        opacity: 0.6 !important;
+    }
+</style>
+
 <script>
     var xhr = new XMLHttpRequest();
     xhr.open("POST", 'https://du.uipath.com/ocr', true);
@@ -13,7 +20,6 @@
             var status = xhr.status;
             if (status === 0 || (status >= 200 && status < 400)) {
                 var response = JSON.parse(xhr.response);
-                // console.log(response);
                 document.getElementById('processDocument').hidden = true;
 
                 if (response.responses && response.responses[0] && response.responses[0].textAnnotations) {
@@ -38,13 +44,25 @@
 
         const poly = document.createElement("div");
 
+        poly.onmouseover = function (event) {
+            event.target.style.opacity = 0.4;
+        };
+
+        poly.onmouseleave = function (event) {
+            event.target.style.opacity = 0;
+        };
+
+        poly.onclick = function (event) {
+            event.target.classList.toggle('selected');
+        }
+
         poly.style.position = 'absolute';
         poly.style.height = height + 'px';
         poly.style.width = width + 'px';
-        poly.style.backgroundColor = 'rgb(' + Math.floor(Math.random()*255) + ',' + Math.floor(Math.random()*255) + ',' + Math.floor(Math.random()*255) + ')';
+        poly.style.backgroundColor = 'rgb(' + Math.floor(Math.random() * 255) + ',' + Math.floor(Math.random() * 255) + ',' + Math.floor(Math.random() * 255) + ')';
         poly.style.borderStyle = 'solid';
         poly.style.borderWidth = '2px';
-        poly.style.opacity = 0.4;
+        poly.style.opacity = 0;
         poly.style.top = top + 'px';
         poly.style.left = left + 'px';
 
@@ -57,7 +75,7 @@
 </script>
 
 <header>
-    <button id="processDocument" onclick="processImage()">Process document</button>
+    <button style="position: fixed;" id="processDocument" onclick="processImage()">Process document</button>
 </header>
 
 <body>
